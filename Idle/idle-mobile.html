@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Idle io</title>
+    <style>
+
+:root {
+    --color: #555;
+    }
+        
+body {
+    background-color: var(--color);
+    align-items:center;
+    }
+
+#colors {
+    margin:20px;
+    align-items:center;
+    display:flex;
+    flex-direction: column;
+    }
+.colors {
+    margin:5px;
+    }
+
+.area {
+    background-color: color-mix(in lch, var(--color), #fff);
+    margin: auto;
+    height: 97vh;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    }
+
+.column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height:100%;
+    width: 100%;
+    background-color:#aaa;
+    opacity:0.8;
+    padding:10px;
+    }
+
+
+.button {
+    font-size: 18px;
+    width:90px;
+    height:90px;
+    background-color: color-mix(in lch, color-mix(in lch, var(--color), #fff), #fff);
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    }
+
+.button:active {
+    width:85px;
+    height:85px;
+    font-size:12px;
+    background-color:#fff;
+    }
+
+
+.buttons {
+    background-color: color-mix(in lch, color-mix(in lch, var(--color), #fff), #fff);
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    }
+
+.data {
+    margin:20px;
+    }
+
+
+    </style>
+  </head>
+  <body>
+      <div class="area">
+        <div class="column">
+            <button onclick="PPC()" class="button" class="buttons"><h3 id="score">0</h3></button>
+            <div class="data">
+                <button onclick="saveGame()">Save Game</button>
+                <button onclick="loadGame()">Load Game</button>
+            </div>
+            <button onclick="onePPC()" class="buttons"><h3 id="ppc">Points Per Click: 1</h3><p id="ppcc">Increase Points Per Click: 10 points</p></button><br>
+            <button onclick="onePPS()" class="buttons""><h3 id="pps">Points Per Second: 0</h3><p id="ppsc">Increase Points Per Second: 100 points</p></button><br>
+           <button onclick="KeeperB()" class="buttons"><p id="keep">Buy Keeper: 10,000 points</p></button><br>
+            <button onclick="Prestige()" class="buttons">Prestige: 1,000,000,000</button>
+                <div id="colors">
+                <div class="colors">
+                 <button onclick="Color('#555')">default</button>
+                 <button onclick="Color('black')" style="background-color:black; color:white;">black</button>
+                 <button onclick="Color('red')" style="background-color:red;">red</button>
+                 <button onclick="Color('orange')" style="background-color:orange;">orange</button>
+                 <button onclick="Color('yellow')" style="background-color:yellow;">yellow</button>
+                </div>
+                <div class="colors">
+                 <button onclick="Color('green')" style="background-color:green;">green</button>
+                 <button onclick="Color('blue')" style="background-color:blue;">blue</button>
+                 <button onclick="Color('purple')" style="background-color:purple;">purple</button>
+                 <button onclick="Color('pink')" style="background-color:pink;">pink</button>
+                </div>
+                </div>
+        </div>
+      </div>
+	<script>
+    const scoreText = document.getElementById("score");
+const ppcText = document.getElementById("ppc");
+const ppsText = document.getElementById("pps");
+const ppccText = document.getElementById("ppcc");
+const ppscText = document.getElementById("ppsc");
+const keepText = document.getElementById("keep");
+const settings = document.getElementById("settings");
+var score = 0;
+var ppc = 1; // Points Per Click
+var pps = 0; // Points Per Second
+var ppcb = 0; // Amount of times ppc was bought
+var ppsb = 0; // Amount of times pps was bought
+var kb = 0; // Keeper Bought?
+var ko = 0; // Keeper On?
+var prestige = 1;
+
+
+function PPC() {
+    score = score + ppc * prestige;
+    }
+
+function PPS() {
+    if (ppsb >= 1) {
+    score = score + pps * prestige;
+        }
+    }
+
+function Keeper() {
+    if (kb == 1 && ko == 1) {
+        onePPS();
+        }
+    }
+
+function onePPC() {
+    if (score >= 10/prestige) {
+        score = score - 10/prestige;
+        ppc = ppc + 1;
+        ppcb = ppcb + 1;
+        ppcc = ppcc + 1;
+        }
+    }
+
+function onePPS() {
+    if (score >= 100/prestige) {
+        score = score - 100/prestige;
+        pps = pps + 1;
+        ppsb = ppsb + 1;
+        ppsc = ppsc + 1;
+        }
+    }
+
+function Prestige() {
+        if (score >= 1000000000) {
+            score = 0;
+            ppc = 1;
+            pps = 0;
+            ppsb = 0;
+            ppcb = 0
+            prestige = prestige * 2;
+            }
+    }
+
+function KeeperB() {
+    if (score >= 10000 && kb == 0) {
+        kb = 1;
+        ko = 1;
+        keepText.innerHTML = "Turn Off Keeper";
+        score = score - 10000;
+        }
+    if (kb == 1) {
+        if (ko == 0) {
+            ko = 1;
+            keepText.innerHTML = "Turn Off Keeper";
+            } else {
+            ko = 0;
+            keepText.innerHTML = "Turn On Keeper";
+            }
+        }
+    }
+        
+
+function text() {
+    scoreText.innerHTML = score.toLocaleString();
+    ppsText.innerHTML = "Points Per Second: " + (pps * prestige).toLocaleString();
+    ppcText.innerHTML = "Points Per Click: " + (ppc * prestige).toLocaleString();
+    ppccText.innerHTML = "Increase Points Per Click: " + (10/prestige).toLocaleString();
+    ppscText.innerHTML = "Increase Points Per Second: " + (100/prestige).toLocaleString();
+    }
+
+function saveGame() {
+    var gameData = {
+        score: score,
+        ppc: ppc,
+        pps: pps,
+        ppcb: ppcb,
+        ppsb: ppsb,
+        ppcc: ppcc,
+        ppsc: ppsc,
+        kb: kb,
+        ko: ko,
+        prestige: prestige
+            };
+    localStorage.setItem("clickerGameData", JSON.stringify(gameData));
+    }
+
+function loadGame() {
+    var savedData = localStorage.getItem("clickerGameData");
+    if (savedData) {
+        var gameData = JSON.parse(savedData);
+        score = gameData.score;
+        ppc = gameData.ppc;
+        pps = gameData.pps;
+        ppcb = gameData.ppcb;
+        ppsb = gameData.ppsb;
+        kb = gameData.kb;
+        ko = gameData.ko;
+        prestige = gameData.prestige;
+        }
+    if (kb == 1) {
+        KeeperB();
+        }
+    }
+
+function Color(color) {
+    document.body.style.setProperty('--color', color);
+}
+
+function Window() {
+    if (window.innerWidth > 800) {
+        saveGame();
+        window.location.href = "index.html";
+        }
+    }
+       
+setInterval(function() {PPS()}, 1000);
+setInterval(function() {Keeper(); text(); Window();}, 0);
+    </script>
+  </body>
+</html>
